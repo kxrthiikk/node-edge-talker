@@ -12,6 +12,7 @@ import {
   useReactFlow,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
+import { Download } from 'lucide-react';
 
 import NodeToolbar from './NodeToolbar';
 import StartNode from './nodes/StartNode';
@@ -111,6 +112,27 @@ const ChatbotBuilder = () => {
     );
   }, [setNodes]);
 
+  const exportFlow = useCallback(() => {
+    const flowData = {
+      nodes,
+      edges,
+      timestamp: new Date().toISOString(),
+    };
+
+    const dataStr = JSON.stringify(flowData, null, 2);
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(dataBlob);
+    
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `chatbot-flow-${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    URL.revokeObjectURL(url);
+  }, [nodes, edges]);
+
   // Create enhanced node types with delete functionality
   const enhancedNodeTypes = {
     start: (props) => <StartNode {...props} onDelete={deleteNode} onUpdate={updateNodeData} />,
@@ -150,7 +172,16 @@ const ChatbotBuilder = () => {
             maskColor="rgba(0, 0, 0, 0.1)"
           />
           <Panel position="top-center" className="bg-white px-4 py-2 rounded-lg shadow-sm border border-gray-200">
-            <h1 className="text-lg font-semibold text-gray-800">Chatbot Builder</h1>
+            <div className="flex items-center space-x-4">
+              <h1 className="text-lg font-semibold text-gray-800">Chatbot Builder</h1>
+              <button
+                onClick={exportFlow}
+                className="flex items-center space-x-2 px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white text-sm rounded-md transition-colors"
+              >
+                <Download size={16} />
+                <span>Export JSON</span>
+              </button>
+            </div>
           </Panel>
         </ReactFlow>
       </div>
