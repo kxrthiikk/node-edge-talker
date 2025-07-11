@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Handle, Position } from '@xyflow/react';
 import { GitBranch, Edit2, Trash2, Check, X } from 'lucide-react';
 
-const ConditionNode = ({ data, id }) => {
+const ConditionNode = ({ data, id, onDelete, onUpdate }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [condition, setCondition] = useState(data.condition || 'Check condition');
   const [trueLabel, setTrueLabel] = useState(data.trueLabel || 'Yes');
@@ -16,6 +16,11 @@ const ConditionNode = ({ data, id }) => {
     setCondition(tempCondition);
     setTrueLabel(tempTrueLabel);
     setFalseLabel(tempFalseLabel);
+    onUpdate && onUpdate(id, { 
+      condition: tempCondition, 
+      trueLabel: tempTrueLabel, 
+      falseLabel: tempFalseLabel 
+    });
     setIsEditing(false);
   };
 
@@ -24,6 +29,10 @@ const ConditionNode = ({ data, id }) => {
     setTempTrueLabel(trueLabel);
     setTempFalseLabel(falseLabel);
     setIsEditing(false);
+  };
+
+  const handleDelete = () => {
+    onDelete && onDelete(id);
   };
 
   return (
@@ -43,7 +52,7 @@ const ConditionNode = ({ data, id }) => {
                 <Edit2 size={12} />
               </button>
               <button
-                onClick={() => console.log('Delete node:', id)}
+                onClick={handleDelete}
                 className="p-1 hover:bg-red-500 rounded"
               >
                 <Trash2 size={12} />

@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Handle, Position } from '@xyflow/react';
 import { HelpCircle, Edit2, Trash2, Check, X, Plus } from 'lucide-react';
 
-const QuestionNode = ({ data, id }) => {
+const QuestionNode = ({ data, id, onDelete, onUpdate }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [question, setQuestion] = useState(data.question || 'What would you like to know?');
   const [options, setOptions] = useState(data.options || ['Option 1', 'Option 2']);
@@ -13,6 +13,7 @@ const QuestionNode = ({ data, id }) => {
   const handleSave = () => {
     setQuestion(tempQuestion);
     setOptions([...tempOptions]);
+    onUpdate && onUpdate(id, { question: tempQuestion, options: [...tempOptions] });
     setIsEditing(false);
   };
 
@@ -20,6 +21,10 @@ const QuestionNode = ({ data, id }) => {
     setTempQuestion(question);
     setTempOptions([...options]);
     setIsEditing(false);
+  };
+
+  const handleDelete = () => {
+    onDelete && onDelete(id);
   };
 
   const addOption = () => {
@@ -53,7 +58,7 @@ const QuestionNode = ({ data, id }) => {
                 <Edit2 size={12} />
               </button>
               <button
-                onClick={() => console.log('Delete node:', id)}
+                onClick={handleDelete}
                 className="p-1 hover:bg-red-500 rounded"
               >
                 <Trash2 size={12} />

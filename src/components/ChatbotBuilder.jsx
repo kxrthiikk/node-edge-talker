@@ -9,6 +9,7 @@ import {
   useNodesState,
   useEdgesState,
   Panel,
+  useReactFlow,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 
@@ -65,7 +66,7 @@ const ChatbotBuilder = () => {
       };
 
       const newNode = {
-        id: `${nodes.length + 1}`,
+        id: `${Date.now()}`, // Use timestamp for unique IDs
         type: selectedNodeType,
         position,
         data: getDefaultNodeData(selectedNodeType),
@@ -74,7 +75,7 @@ const ChatbotBuilder = () => {
       setNodes((nds) => nds.concat(newNode));
       setSelectedNodeType(null);
     },
-    [nodes, selectedNodeType, setNodes]
+    [selectedNodeType, setNodes]
   );
 
   const onDragOver = useCallback((event) => {
@@ -110,6 +111,15 @@ const ChatbotBuilder = () => {
     );
   }, [setNodes]);
 
+  // Create enhanced node types with delete functionality
+  const enhancedNodeTypes = {
+    start: (props) => <StartNode {...props} onDelete={deleteNode} onUpdate={updateNodeData} />,
+    message: (props) => <MessageNode {...props} onDelete={deleteNode} onUpdate={updateNodeData} />,
+    question: (props) => <QuestionNode {...props} onDelete={deleteNode} onUpdate={updateNodeData} />,
+    condition: (props) => <ConditionNode {...props} onDelete={deleteNode} onUpdate={updateNodeData} />,
+    end: (props) => <EndNode {...props} onDelete={deleteNode} onUpdate={updateNodeData} />,
+  };
+
   return (
     <div className="flex h-screen bg-gray-50">
       <NodeToolbar 
@@ -127,7 +137,7 @@ const ChatbotBuilder = () => {
           onDrop={onDrop}
           onDragOver={onDragOver}
           onNodeDragStart={onNodeDragStart}
-          nodeTypes={nodeTypes}
+          nodeTypes={enhancedNodeTypes}
           fitView
           className="bg-white"
           proOptions={{ hideAttribution: true }}

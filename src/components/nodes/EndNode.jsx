@@ -3,19 +3,24 @@ import React, { useState } from 'react';
 import { Handle, Position } from '@xyflow/react';
 import { Square, Edit2, Trash2, Check, X } from 'lucide-react';
 
-const EndNode = ({ data, id }) => {
+const EndNode = ({ data, id, onDelete, onUpdate }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [message, setMessage] = useState(data.message || 'Thank you!');
   const [tempMessage, setTempMessage] = useState(message);
 
   const handleSave = () => {
     setMessage(tempMessage);
+    onUpdate && onUpdate(id, { message: tempMessage });
     setIsEditing(false);
   };
 
   const handleCancel = () => {
     setTempMessage(message);
     setIsEditing(false);
+  };
+
+  const handleDelete = () => {
+    onDelete && onDelete(id);
   };
 
   return (
@@ -35,7 +40,7 @@ const EndNode = ({ data, id }) => {
                 <Edit2 size={12} />
               </button>
               <button
-                onClick={() => console.log('Delete node:', id)}
+                onClick={handleDelete}
                 className="p-1 hover:bg-red-600 rounded"
               >
                 <Trash2 size={12} />

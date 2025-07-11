@@ -3,15 +3,15 @@ import React, { useState } from 'react';
 import { Handle, Position } from '@xyflow/react';
 import { MessageSquare, Edit2, Trash2, Check, X } from 'lucide-react';
 
-const MessageNode = ({ data, id }) => {
+const MessageNode = ({ data, id, onDelete, onUpdate }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [message, setMessage] = useState(data.message || 'Hello!');
   const [tempMessage, setTempMessage] = useState(message);
 
   const handleSave = () => {
     setMessage(tempMessage);
+    onUpdate && onUpdate(id, { message: tempMessage });
     setIsEditing(false);
-    // In a real app, you'd update the node data here
   };
 
   const handleCancel = () => {
@@ -20,8 +20,7 @@ const MessageNode = ({ data, id }) => {
   };
 
   const handleDelete = () => {
-    // In a real app, you'd call a delete function passed as prop
-    console.log('Delete node:', id);
+    onDelete && onDelete(id);
   };
 
   return (
