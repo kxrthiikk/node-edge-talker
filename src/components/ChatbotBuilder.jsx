@@ -1,4 +1,3 @@
-
 import React, { useCallback, useState } from 'react';
 import {
   ReactFlow,
@@ -20,12 +19,16 @@ import MessageNode from './nodes/MessageNode';
 import QuestionNode from './nodes/QuestionNode';
 import ConditionNode from './nodes/ConditionNode';
 import EndNode from './nodes/EndNode';
+import ImageNode from './nodes/ImageNode';
+import VideoNode from './nodes/VideoNode';
 
 const nodeTypes = {
   start: StartNode,
   message: MessageNode,
   question: QuestionNode,
   condition: ConditionNode,
+  image: ImageNode,
+  video: VideoNode,
   end: EndNode,
 };
 
@@ -92,6 +95,10 @@ const ChatbotBuilder = () => {
         return { question: 'What would you like to know?', options: ['Option 1', 'Option 2'] };
       case 'condition':
         return { condition: 'Check user input', trueLabel: 'Yes', falseLabel: 'No' };
+      case 'image':
+        return { imageUrl: '', caption: '' };
+      case 'video':
+        return { videoUrl: '', caption: '' };
       case 'end':
         return { message: 'Thank you for chatting!' };
       default:
@@ -139,6 +146,8 @@ const ChatbotBuilder = () => {
     message: (props) => <MessageNode {...props} onDelete={deleteNode} onUpdate={updateNodeData} />,
     question: (props) => <QuestionNode {...props} onDelete={deleteNode} onUpdate={updateNodeData} />,
     condition: (props) => <ConditionNode {...props} onDelete={deleteNode} onUpdate={updateNodeData} />,
+    image: (props) => <ImageNode {...props} onDelete={deleteNode} onUpdate={updateNodeData} />,
+    video: (props) => <VideoNode {...props} onDelete={deleteNode} onUpdate={updateNodeData} />,
     end: (props) => <EndNode {...props} onDelete={deleteNode} onUpdate={updateNodeData} />,
   };
 

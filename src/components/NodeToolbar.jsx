@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { MessageSquare, HelpCircle, GitBranch, Play, Square } from 'lucide-react';
+import { MessageSquare, HelpCircle, GitBranch, Play, Square, Image, Video } from 'lucide-react';
 
 const nodeOptions = [
   {
@@ -23,6 +23,20 @@ const nodeOptions = [
     icon: GitBranch,
     color: 'bg-yellow-500',
     description: 'Branch based on condition'
+  },
+  {
+    type: 'image',
+    label: 'Image',
+    icon: Image,
+    color: 'bg-purple-500',
+    description: 'Send an image to user'
+  },
+  {
+    type: 'video',
+    label: 'Video',
+    icon: Video,
+    color: 'bg-indigo-500',
+    description: 'Send a video to user'
   },
   {
     type: 'end',
