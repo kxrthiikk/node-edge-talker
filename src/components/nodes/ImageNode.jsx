@@ -44,7 +44,7 @@ const ImageNode = ({ data, id, onDelete, onUpdate }) => {
   };
 
   return (
-    <div className="bg-white rounded-lg border-2 border-purple-200 shadow-lg w-[200px] group">
+    <div className="bg-white rounded-lg border-2 border-purple-200 shadow-lg w-[160px] group">
       <div className="bg-purple-500 text-white p-2 rounded-t-lg flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <Image size={16} />
@@ -136,7 +136,7 @@ const ImageNode = ({ data, id, onDelete, onUpdate }) => {
           >
             {imageUrl ? (
               <div className="space-y-1">
-                <div className="w-full h-20 bg-gray-100 rounded border overflow-hidden">
+                <div className="w-full h-16 bg-gray-100 rounded border overflow-hidden">
                   <img 
                     src={imageUrl} 
                     alt="Preview" 
@@ -155,7 +155,7 @@ const ImageNode = ({ data, id, onDelete, onUpdate }) => {
                 )}
               </div>
             ) : (
-              <div className="flex items-center justify-center h-20 border-2 border-dashed border-gray-300 rounded text-gray-500">
+              <div className="flex items-center justify-center h-16 border-2 border-dashed border-gray-300 rounded text-gray-500">
                 <div className="text-center">
                   <Image size={16} className="mx-auto mb-1" />
                   <div className="text-xs">Click to add</div>
