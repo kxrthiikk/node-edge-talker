@@ -44,7 +44,7 @@ const ImageNode = ({ data, id, onDelete, onUpdate }) => {
   };
 
   return (
-    <div className="bg-white rounded-lg border-2 border-purple-200 shadow-lg w-[280px] group">
+    <div className="bg-white rounded-lg border-2 border-purple-200 shadow-lg w-[200px] group">
       <div className="bg-purple-500 text-white p-2 rounded-t-lg flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <Image size={16} />
@@ -70,15 +70,15 @@ const ImageNode = ({ data, id, onDelete, onUpdate }) => {
         </div>
       </div>
       
-      <div className="p-3">
+      <div className="p-2">
         {isEditing ? (
-          <div className="space-y-3">
+          <div className="space-y-2">
             <div>
               <label className="text-xs text-gray-600 mb-1 block">Image URL</label>
               <input
                 value={tempImageUrl}
                 onChange={handleUrlChange}
-                className="w-full p-2 border border-gray-300 rounded text-sm"
+                className="w-full p-1.5 border border-gray-300 rounded text-xs"
                 placeholder="Enter image URL..."
               />
             </div>
@@ -97,19 +97,19 @@ const ImageNode = ({ data, id, onDelete, onUpdate }) => {
               />
               <button
                 onClick={() => fileInputRef.current?.click()}
-                className="w-full p-2 border border-dashed border-gray-300 rounded text-sm text-gray-600 hover:bg-gray-50 flex items-center justify-center space-x-2"
+                className="w-full p-1.5 border border-dashed border-gray-300 rounded text-xs text-gray-600 hover:bg-gray-50 flex items-center justify-center space-x-1"
               >
-                <Upload size={16} />
-                <span>Upload Image</span>
+                <Upload size={12} />
+                <span>Upload</span>
               </button>
             </div>
             
             <div>
-              <label className="text-xs text-gray-600 mb-1 block">Caption (optional)</label>
+              <label className="text-xs text-gray-600 mb-1 block">Caption</label>
               <input
                 value={tempCaption}
                 onChange={(e) => setTempCaption(e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded text-sm"
+                className="w-full p-1.5 border border-gray-300 rounded text-xs"
                 placeholder="Enter caption..."
               />
             </div>
@@ -119,13 +119,13 @@ const ImageNode = ({ data, id, onDelete, onUpdate }) => {
                 onClick={handleSave}
                 className="p-1 bg-green-500 text-white rounded hover:bg-green-600"
               >
-                <Check size={14} />
+                <Check size={12} />
               </button>
               <button
                 onClick={handleCancel}
                 className="p-1 bg-gray-500 text-white rounded hover:bg-gray-600"
               >
-                <X size={14} />
+                <X size={12} />
               </button>
             </div>
           </div>
@@ -135,8 +135,8 @@ const ImageNode = ({ data, id, onDelete, onUpdate }) => {
             onClick={() => setIsEditing(true)}
           >
             {imageUrl ? (
-              <div className="space-y-2">
-                <div className="w-full h-32 bg-gray-100 rounded border overflow-hidden">
+              <div className="space-y-1">
+                <div className="w-full h-20 bg-gray-100 rounded border overflow-hidden">
                   <img 
                     src={imageUrl} 
                     alt="Preview" 
@@ -146,19 +146,19 @@ const ImageNode = ({ data, id, onDelete, onUpdate }) => {
                       e.target.nextSibling.style.display = 'flex';
                     }}
                   />
-                  <div className="hidden w-full h-full items-center justify-center text-sm text-red-500">
-                    Failed to load image
+                  <div className="hidden w-full h-full items-center justify-center text-xs text-red-500">
+                    Failed to load
                   </div>
                 </div>
                 {caption && (
-                  <div className="text-sm text-gray-600 break-words">{caption}</div>
+                  <div className="text-xs text-gray-600 break-words">{caption}</div>
                 )}
               </div>
             ) : (
-              <div className="flex items-center justify-center h-32 border-2 border-dashed border-gray-300 rounded text-gray-500">
+              <div className="flex items-center justify-center h-20 border-2 border-dashed border-gray-300 rounded text-gray-500">
                 <div className="text-center">
-                  <Image size={24} className="mx-auto mb-2" />
-                  <div className="text-sm">Click to add image</div>
+                  <Image size={16} className="mx-auto mb-1" />
+                  <div className="text-xs">Click to add</div>
                 </div>
               </div>
             )}
