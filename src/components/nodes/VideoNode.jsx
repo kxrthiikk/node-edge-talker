@@ -44,7 +44,7 @@ const VideoNode = ({ data, id, onDelete, onUpdate }) => {
   };
 
   return (
-    <div className="bg-white rounded-lg border-2 border-indigo-200 shadow-lg min-w-[250px] group">
+    <div className="bg-white rounded-lg border-2 border-indigo-200 shadow-lg w-[280px] group">
       <div className="bg-indigo-500 text-white p-2 rounded-t-lg flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <Video size={16} />
@@ -136,18 +136,22 @@ const VideoNode = ({ data, id, onDelete, onUpdate }) => {
           >
             {videoUrl ? (
               <div className="space-y-2">
-                <video 
-                  src={videoUrl} 
-                  className="w-full h-32 object-cover rounded border"
-                  controls
-                  onError={(e) => {
-                    e.target.style.display = 'none';
-                    e.target.nextSibling.style.display = 'block';
-                  }}
-                />
-                <div className="hidden text-sm text-red-500">Failed to load video</div>
+                <div className="w-full h-32 bg-gray-100 rounded border overflow-hidden">
+                  <video 
+                    src={videoUrl} 
+                    className="w-full h-full object-cover"
+                    controls
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                      e.target.nextSibling.style.display = 'flex';
+                    }}
+                  />
+                  <div className="hidden w-full h-full items-center justify-center text-sm text-red-500">
+                    Failed to load video
+                  </div>
+                </div>
                 {caption && (
-                  <div className="text-sm text-gray-600">{caption}</div>
+                  <div className="text-sm text-gray-600 break-words">{caption}</div>
                 )}
               </div>
             ) : (

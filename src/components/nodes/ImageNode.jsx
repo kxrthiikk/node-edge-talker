@@ -44,7 +44,7 @@ const ImageNode = ({ data, id, onDelete, onUpdate }) => {
   };
 
   return (
-    <div className="bg-white rounded-lg border-2 border-purple-200 shadow-lg min-w-[250px] group">
+    <div className="bg-white rounded-lg border-2 border-purple-200 shadow-lg w-[280px] group">
       <div className="bg-purple-500 text-white p-2 rounded-t-lg flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <Image size={16} />
@@ -136,18 +136,22 @@ const ImageNode = ({ data, id, onDelete, onUpdate }) => {
           >
             {imageUrl ? (
               <div className="space-y-2">
-                <img 
-                  src={imageUrl} 
-                  alt="Preview" 
-                  className="w-full h-32 object-cover rounded border"
-                  onError={(e) => {
-                    e.target.style.display = 'none';
-                    e.target.nextSibling.style.display = 'block';
-                  }}
-                />
-                <div className="hidden text-sm text-red-500">Failed to load image</div>
+                <div className="w-full h-32 bg-gray-100 rounded border overflow-hidden">
+                  <img 
+                    src={imageUrl} 
+                    alt="Preview" 
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                      e.target.nextSibling.style.display = 'flex';
+                    }}
+                  />
+                  <div className="hidden w-full h-full items-center justify-center text-sm text-red-500">
+                    Failed to load image
+                  </div>
+                </div>
                 {caption && (
-                  <div className="text-sm text-gray-600">{caption}</div>
+                  <div className="text-sm text-gray-600 break-words">{caption}</div>
                 )}
               </div>
             ) : (
