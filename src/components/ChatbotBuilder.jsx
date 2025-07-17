@@ -1,4 +1,5 @@
-import React, { useCallback, useState } from 'react';
+
+import React, { useCallback, useState, useMemo } from 'react';
 import {
   ReactFlow,
   addEdge,
@@ -22,16 +23,6 @@ import EndNode from './nodes/EndNode';
 import ImageNode from './nodes/ImageNode';
 import VideoNode from './nodes/VideoNode';
 
-const nodeTypes = {
-  start: StartNode,
-  message: MessageNode,
-  question: QuestionNode,
-  condition: ConditionNode,
-  image: ImageNode,
-  video: VideoNode,
-  end: EndNode,
-};
-
 const initialNodes = [
   {
     id: '1',
@@ -53,10 +44,6 @@ const ChatbotBuilder = () => {
     [setEdges]
   );
 
-  const onNodeDragStart = useCallback((event, node) => {
-    event.dataTransfer.effectAllowed = 'move';
-  }, []);
-
   const onDrop = useCallback(
     (event) => {
       event.preventDefault();
@@ -70,7 +57,7 @@ const ChatbotBuilder = () => {
       };
 
       const newNode = {
-        id: `${Date.now()}`, // Use timestamp for unique IDs
+        id: `${Date.now()}`,
         type: selectedNodeType,
         position,
         data: getDefaultNodeData(selectedNodeType),
@@ -140,8 +127,8 @@ const ChatbotBuilder = () => {
     URL.revokeObjectURL(url);
   }, [nodes, edges]);
 
-  // Create enhanced node types with delete functionality
-  const enhancedNodeTypes = {
+  // Memoize node types to prevent React Flow warnings
+  const nodeTypes = useMemo(() => ({
     start: (props) => <StartNode {...props} onDelete={deleteNode} onUpdate={updateNodeData} />,
     message: (props) => <MessageNode {...props} onDelete={deleteNode} onUpdate={updateNodeData} />,
     question: (props) => <QuestionNode {...props} onDelete={deleteNode} onUpdate={updateNodeData} />,
@@ -149,7 +136,7 @@ const ChatbotBuilder = () => {
     image: (props) => <ImageNode {...props} onDelete={deleteNode} onUpdate={updateNodeData} />,
     video: (props) => <VideoNode {...props} onDelete={deleteNode} onUpdate={updateNodeData} />,
     end: (props) => <EndNode {...props} onDelete={deleteNode} onUpdate={updateNodeData} />,
-  };
+  }), [deleteNode, updateNodeData]);
 
   return (
     <div className="flex h-screen bg-gray-50">
@@ -167,8 +154,7 @@ const ChatbotBuilder = () => {
           onConnect={onConnect}
           onDrop={onDrop}
           onDragOver={onDragOver}
-          onNodeDragStart={onNodeDragStart}
-          nodeTypes={enhancedNodeTypes}
+          nodeTypes={nodeTypes}
           fitView
           className="bg-white"
           proOptions={{ hideAttribution: true }}
