@@ -477,9 +477,8 @@ const ChatbotBuilder = () => {
         selectedNodeType={selectedNodeType}
       />
       
-      <div className="flex-1 flex flex-col h-screen min-h-0">
-        <div className="flex-1 min-h-0">
-          <ReactFlow
+      <div className="flex-1 h-screen">
+        <ReactFlow
           nodes={nodes}
           edges={edges}
           onNodesChange={onNodesChange}
@@ -644,7 +643,6 @@ const ChatbotBuilder = () => {
             )}
           </Panel>
         </ReactFlow>
-        </div>
       </div>
       
       
