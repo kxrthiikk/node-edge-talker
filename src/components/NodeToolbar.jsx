@@ -54,7 +54,7 @@ const NodeToolbar = ({ onNodeSelect, selectedNodeType }) => {
   };
 
   return (
-    <div className="w-64 bg-white border-r border-gray-200 p-4 shadow-sm">
+    <div className="w-64 h-screen bg-white border-r border-gray-200 p-4 shadow-sm overflow-y-auto">
       <div className="mb-6">
         <h2 className="text-lg font-semibold text-gray-800 mb-2">Node Library</h2>
         <p className="text-sm text-gray-600">Drag nodes to the canvas</p>

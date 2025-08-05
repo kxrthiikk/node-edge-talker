@@ -23,6 +23,16 @@ import ConditionNode from './nodes/ConditionNode';
 import EndNode from './nodes/EndNode';
 import ImageNode from './nodes/ImageNode';
 import VideoNode from './nodes/VideoNode';
+import Loader from './Loader';
+
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectGroup,
+  SelectItem
+} from './ui/select';
 
 const initialNodes = [
   {
@@ -39,6 +49,7 @@ const initialEdges = [];
 const API_BASE_URL = 'http://whatsapp-admin.local/chatbot-flow';
 
 const ChatbotBuilder = () => {
+  // All state hooks FIRST
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const [selectedNodeType, setSelectedNodeType] = useState(null);
@@ -47,17 +58,28 @@ const ChatbotBuilder = () => {
   const [flowDescription, setFlowDescription] = useState('');
   const [isSaving, setIsSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState('');
-  
-  // WhatsApp deployment states
   const [isDeploying, setIsDeploying] = useState(false);
   const [whatsappStatus, setWhatsappStatus] = useState(null);
   const [whatsappMessage, setWhatsappMessage] = useState('');
-  const { toast } = useToast();
-  
-  // Load flow states
   const [availableFlows, setAvailableFlows] = useState([]);
   const [showLoadDropdown, setShowLoadDropdown] = useState(false);
   const [loadingFlows, setLoadingFlows] = useState(false);
+
+  const dropdownRef = useRef(null);
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    if (!showLoadDropdown) return;
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowLoadDropdown(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [showLoadDropdown]);
+
+  const { toast } = useToast();
 
   const onConnect = useCallback(
     (params) => setEdges((eds) => addEdge(params, eds)),
@@ -455,8 +477,9 @@ const ChatbotBuilder = () => {
         selectedNodeType={selectedNodeType}
       />
       
-      <div className="flex-1">
-        <ReactFlow
+      <div className="flex-1 flex flex-col h-screen min-h-0">
+        <div className="flex-1 min-h-0">
+          <ReactFlow
           nodes={nodes}
           edges={edges}
           onNodesChange={onNodesChange}
@@ -466,7 +489,7 @@ const ChatbotBuilder = () => {
           onDragOver={onDragOver}
           nodeTypes={nodeTypes}
           fitView
-          className="bg-white"
+          className="bg-white h-full"
           proOptions={{ hideAttribution: true }}
         >
           <Background color="#f1f5f9" size={1} />
@@ -515,13 +538,8 @@ const ChatbotBuilder = () => {
                 className="flex items-center space-x-2 px-3 py-1 bg-green-500 hover:bg-green-600 disabled:bg-gray-400 text-white text-sm rounded-md transition-colors"
               >
                 <Save size={16} />
-                <span>
-                  {isSaving 
-                    ? 'Saving...' 
-                    : currentFlowId 
-                      ? 'Update Flow' 
-                      : 'Create Flow'
-                  }
+                <span style={{minWidth:70}}>
+                  {currentFlowId ? 'Update Flow' : 'Create Flow'}
                 </span>
               </button>
               
@@ -532,19 +550,65 @@ const ChatbotBuilder = () => {
                 className="flex items-center space-x-2 px-3 py-1 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white text-sm rounded-md transition-colors"
               >
                 <MessageSquare size={16} />
-                <span>
-                  {isDeploying ? 'Deploying...' : 'Deploy to WhatsApp'}
-                </span>
+                <span style={{minWidth:110}}>
+                   Deploy to WhatsApp
+                 </span>
               </button>
               
-              {/* Load Button */}
-              <button
-                onClick={showLoadDialog}
-                className="flex items-center space-x-2 px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white text-sm rounded-md transition-colors"
-              >
-                <FolderOpen size={16} />
-                <span>Load Flow</span>
-              </button>
+              {/* Load Button & Dropdown */}
+              <div style={{position:'relative',display:'inline-block'}} ref={dropdownRef}>
+                <button
+                  onClick={showLoadDialog}
+                  className="flex items-center space-x-2 px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white text-sm rounded-md transition-colors"
+                >
+                  <FolderOpen size={16} />
+                  <span>Load Flow</span>
+                </button>
+                {showLoadDropdown && (
+                  <div
+                    style={{
+                      position: 'absolute',
+                      top: '110%',
+                      left: 0,
+                      zIndex: 1000,
+                      minWidth: 220,
+                      background: '#fff',
+                      border: '1px solid #e5e7eb',
+                      borderRadius: 10,
+                      boxShadow: '0 4px 32px rgba(0,0,0,0.15)',
+                      padding: 16,
+                    }}
+                    className="mt-2"
+                  >
+                    {/* Dropdown Content */}
+                    {loadingFlows ? (
+                      <div className="flex items-center justify-center py-6 w-full">
+                        <Loader />
+                      </div>
+                    ) : availableFlows.length > 0 ? (
+                      <div className="w-full">
+                        {availableFlows.map((flow) => (
+                          <div
+                            key={flow.id}
+                            onClick={() => { handleLoadFlow(String(flow.id)); setShowLoadDropdown(false); }}
+                            className="hover:bg-gray-100 cursor-pointer rounded-md px-4 py-2 flex flex-col items-start mb-1 transition-colors"
+                          >
+                            <span className="font-semibold text-gray-900">{flow.name || `Flow ${flow.id}`}</span>
+                            <span className="text-xs text-gray-500">ID: {flow.id} - Created: {flow.created_at ? new Date(flow.created_at).toLocaleDateString() : ''}</span>
+                            {flow.description && (
+                              <span className="text-xs text-gray-400 mt-1">{flow.description}</span>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="flex items-center justify-center py-6 w-full">
+                        <div className="text-lg text-gray-400">No flows available</div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
               
               {/* New Flow Button */}
               <button
@@ -580,58 +644,26 @@ const ChatbotBuilder = () => {
             )}
           </Panel>
         </ReactFlow>
+        </div>
       </div>
       
-      {/* Full Screen Load Flow Modal */}
-      {showLoadDropdown && (
-        <LoadFlowModal>
-          <div className="bg-white rounded-lg shadow-2xl w-full max-w-3xl mx-4 max-h-[90vh] flex flex-col">
-            {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b border-gray-200">
-              <h2 className="text-xl font-bold text-gray-800">Select Flow to Load</h2>
-              <button
-                onClick={() => { setShowLoadDropdown(false); if (typeof document !== 'undefined') document.body.style.overflow = ''; }}
-                className="text-gray-400 hover:text-gray-600 text-2xl font-bold p-2 hover:bg-gray-100 rounded-full transition-colors"
-              >
-                ✕
-              </button>
-            </div>
-            {/* Content */}
-            <div className="flex-1 overflow-y-auto p-4">
-              {loadingFlows ? (
-                <div className="flex items-center justify-center py-12">
-                  <div className="text-lg text-gray-500">Loading flows...</div>
-                </div>
-              ) : availableFlows.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {availableFlows.map((flow) => (
-                    <div
-                      key={flow.id}
-                      onClick={() => { handleLoadFlow(flow.id); if (typeof document !== 'undefined') document.body.style.overflow = ''; }}
-                      className="p-4 bg-gray-50 border border-gray-200 rounded-lg cursor-pointer hover:bg-blue-50 hover:border-blue-300 hover:shadow-md transition-all duration-200"
-                    >
-                      <div className="font-semibold text-lg text-gray-800 mb-2">{flow.name}</div>
-                      {flow.description && (
-                        <div className="text-sm text-gray-600 mb-3 line-clamp-2">{flow.description}</div>
-                      )}
-                      <div className="text-xs text-gray-500">
-                        <div>ID: {flow.id}</div>
-                        <div>Created: {new Date(flow.created_at).toLocaleDateString()}</div>
-                        {flow.updated_at && (
-                          <div>Updated: {new Date(flow.updated_at).toLocaleDateString()}</div>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="flex items-center justify-center py-12">
-                  <div className="text-lg text-gray-500">No flows available</div>
-                </div>
-              )}
-            </div>
-          </div>
-        </LoadFlowModal>
+      
+      {/* Full Screen Loader Overlay */}
+      {(isSaving || isDeploying) && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100vw',
+          height: '100vh',
+          background: 'rgba(0,0,0,0.25)',
+          zIndex: 9999,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+          <Loader />
+        </div>
       )}
     </div>
   );
@@ -639,27 +671,4 @@ const ChatbotBuilder = () => {
 
 export default ChatbotBuilder;
 
-// Modal component for loading flows
-const LoadFlowModal = ({ children }) => {
-  useEffect(() => {
-    // Prevent body scroll when modal is open
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, []);
 
-  const modalRoot = document.body;
-  
-  return ReactDOM.createPortal(
-    <div 
-      className="fixed inset-0 z-50 flex items-center justify-center"
-      style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
-    >
-      <div style={{ backgroundColor: 'white' }}>
-        {children}
-      </div>
-    </div>,
-    modalRoot
-  );
-};
