@@ -102,4 +102,21 @@ All colors MUST be HSL.
   body {
     @apply bg-background text-foreground;
   }
+  
+  /* React Flow Node Styles - Ensure all nodes are opaque */
+  .react-flow__node {
+    background-color: white !important;
+    opacity: 1 !important;
+  }
+  
+  .react-flow__node-start,
+  .react-flow__node-message,
+  .react-flow__node-question,
+  .react-flow__node-condition,
+  .react-flow__node-image,
+  .react-flow__node-video,
+  .react-flow__node-end {
+    background-color: transparent !important;
+    opacity: 1 !important;
+  }
 }
