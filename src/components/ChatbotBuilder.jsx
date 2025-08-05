@@ -638,3 +638,28 @@ const ChatbotBuilder = () => {
 };
 
 export default ChatbotBuilder;
+
+// Modal component for loading flows
+const LoadFlowModal = ({ children }) => {
+  useEffect(() => {
+    // Prevent body scroll when modal is open
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, []);
+
+  const modalRoot = document.body;
+  
+  return ReactDOM.createPortal(
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center"
+      style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
+    >
+      <div style={{ backgroundColor: 'white' }}>
+        {children}
+      </div>
+    </div>,
+    modalRoot
+  );
+};
