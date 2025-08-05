@@ -41,7 +41,7 @@ const QuestionNode = ({ data, id, onDelete, onUpdate }) => {
   };
 
   return (
-    <div className="bg-white opacity-100 rounded-lg border-2 border-green-200 shadow-lg min-w-[250px] group">
+    <div className="bg-white opacity-100 rounded-lg border-2 border-green-200 shadow-lg min-w-[250px] group" style={{ backgroundColor: 'white' }}>
       <div className="bg-green-500 text-white p-2 rounded-t-lg flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <HelpCircle size={16} />

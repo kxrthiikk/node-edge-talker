@@ -24,7 +24,7 @@ const MessageNode = ({ data, id, onDelete, onUpdate }) => {
   };
 
   return (
-    <div className="bg-white rounded-lg border-2 border-blue-200 shadow-lg min-w-[200px] group">
+    <div className="bg-white rounded-lg border-2 border-blue-200 shadow-lg min-w-[200px] group" style={{ backgroundColor: 'white' }}>
       <div className="bg-blue-500 text-white p-2 rounded-t-lg flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <MessageSquare size={16} />

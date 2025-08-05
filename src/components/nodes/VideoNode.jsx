@@ -44,7 +44,7 @@ const VideoNode = ({ data, id, onDelete, onUpdate }) => {
   };
 
   return (
-    <div className="bg-white rounded-lg border-2 border-indigo-200 shadow-lg w-[160px] group">
+    <div className="bg-white rounded-lg border-2 border-indigo-200 shadow-lg w-[160px] group" style={{ backgroundColor: 'white' }}>
       <div className="bg-indigo-500 text-white p-2 rounded-t-lg flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <Video size={16} />

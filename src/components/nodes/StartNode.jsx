@@ -5,7 +5,7 @@ import { Play } from 'lucide-react';
 
 const StartNode = ({ data }) => {
   return (
-    <div className="bg-gradient-to-r from-green-400 to-green-600 rounded-lg p-4 shadow-lg min-w-[150px]">
+    <div className="bg-gradient-to-r from-green-400 to-green-600 rounded-lg p-4 shadow-lg min-w-[150px]" style={{ backgroundColor: 'white' }}>
       <div className="flex items-center space-x-2 text-white">
         <Play size={18} />
         <span className="font-medium">Start</span>
