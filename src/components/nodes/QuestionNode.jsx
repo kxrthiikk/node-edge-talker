@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Handle, Position } from '@xyflow/react';
 import { HelpCircle, Edit2, Trash2, Check, X, Plus } from 'lucide-react';
@@ -42,7 +41,7 @@ const QuestionNode = ({ data, id, onDelete, onUpdate }) => {
   };
 
   return (
-    <div className="bg-white rounded-lg border-2 border-green-200 shadow-lg min-w-[250px] group">
+    <div className="bg-white opacity-100 rounded-lg border-2 border-green-200 shadow-lg min-w-[250px] group">
       <div className="bg-green-500 text-white p-2 rounded-t-lg flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <HelpCircle size={16} />
@@ -67,7 +66,7 @@ const QuestionNode = ({ data, id, onDelete, onUpdate }) => {
           )}
         </div>
       </div>
-      
+
       <div className="p-3">
         {isEditing ? (
           <div className="space-y-3">
@@ -81,7 +80,7 @@ const QuestionNode = ({ data, id, onDelete, onUpdate }) => {
                 placeholder="Enter question..."
               />
             </div>
-            
+
             <div>
               <div className="flex items-center justify-between mb-2">
                 <label className="text-xs text-gray-600">Options</label>
@@ -92,7 +91,7 @@ const QuestionNode = ({ data, id, onDelete, onUpdate }) => {
                   <Plus size={12} />
                 </button>
               </div>
-              
+
               <div className="space-y-2">
                 {tempOptions.map((option, index) => (
                   <div key={index} className="flex items-center space-x-2">
@@ -114,7 +113,7 @@ const QuestionNode = ({ data, id, onDelete, onUpdate }) => {
                 ))}
               </div>
             </div>
-            
+
             <div className="flex items-center space-x-2">
               <button
                 onClick={handleSave}
@@ -131,7 +130,7 @@ const QuestionNode = ({ data, id, onDelete, onUpdate }) => {
             </div>
           </div>
         ) : (
-          <div 
+          <div
             className="cursor-pointer hover:bg-gray-50 p-1 rounded"
             onClick={() => setIsEditing(true)}
           >
@@ -146,7 +145,7 @@ const QuestionNode = ({ data, id, onDelete, onUpdate }) => {
           </div>
         )}
       </div>
-      
+
       <Handle
         type="target"
         position={Position.Top}
@@ -158,7 +157,7 @@ const QuestionNode = ({ data, id, onDelete, onUpdate }) => {
           type="source"
           position={Position.Bottom}
           id={`option-${index}`}
-          style={{ left: `${20 + (index * 30)}%` }}
+          style={{ left: `${20 + index * 30}%` }}
           className="w-3 h-3 bg-white border-2 border-green-500"
         />
       ))}
