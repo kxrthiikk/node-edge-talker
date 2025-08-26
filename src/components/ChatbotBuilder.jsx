@@ -23,6 +23,9 @@ import ConditionNode from './nodes/ConditionNode';
 import EndNode from './nodes/EndNode';
 import ImageNode from './nodes/ImageNode';
 import VideoNode from './nodes/VideoNode';
+import ContentCardNode from './nodes/ProductCardNode';
+import FormNode from './nodes/FormNode';
+import SelectionNode from './nodes/LocationNode';
 import Loader from './Loader';
 
 import {
@@ -46,7 +49,7 @@ const initialNodes = [
 const initialEdges = [];
 
 // API base URL - adjust this to match your backend URL
-const API_BASE_URL = 'http://whatsapp-admin.local/chatbot-flow';
+const API_BASE_URL = 'https://whatsappcrm.saihasoft.com/chatbot-flow';
 
 const ChatbotBuilder = () => {
   // All state hooks FIRST
@@ -468,6 +471,9 @@ const ChatbotBuilder = () => {
     image: (props) => <ImageNode {...props} onDelete={deleteNode} onUpdate={updateNodeData} />,
     video: (props) => <VideoNode {...props} onDelete={deleteNode} onUpdate={updateNodeData} />,
     end: (props) => <EndNode {...props} onDelete={deleteNode} onUpdate={updateNodeData} />,
+    contentCard: (props) => <ContentCardNode {...props} onDelete={deleteNode} onUpdate={updateNodeData} />,
+    form: (props) => <FormNode {...props} onDelete={deleteNode} onUpdate={updateNodeData} />,
+    selection: (props) => <SelectionNode {...props} onDelete={deleteNode} onUpdate={updateNodeData} />,
   }), [deleteNode, updateNodeData]);
 
   return (
@@ -498,7 +504,7 @@ const ChatbotBuilder = () => {
             nodeColor="#3b82f6"
             maskColor="rgba(0, 0, 0, 0.1)"
           />
-          <Panel position="top-center" className="bg-white px-4 py-2 rounded-lg shadow-sm border border-gray-200">
+          <Panel position="top-right" className="bg-black px-4 py-2 rounded-lg shadow-sm border border-gray-200" style={{ backgroundColor: 'white' }}>
             <div className="flex items-center space-x-4">
               <h1 className="text-lg font-semibold text-gray-800">Chatbot Builder</h1>
               
@@ -581,11 +587,11 @@ const ChatbotBuilder = () => {
                   >
                     {/* Dropdown Content */}
                     {loadingFlows ? (
-                      <div className="flex items-center justify-center py-6 w-full">
-                        <Loader />
+                      <div className="flex items-center justify-center py-6 w-full text-gray-500 text-sm">
+                        Loading flows...
                       </div>
                     ) : availableFlows.length > 0 ? (
-                      <div className="w-full">
+                      <div className="w-full" style={{ maxHeight: 325, overflowY: 'auto', overflowX: 'auto' }}>
                         {availableFlows.map((flow) => (
                           <div
                             key={flow.id}
